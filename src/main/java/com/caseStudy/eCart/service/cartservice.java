@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class cartservice {
     @Autowired
@@ -39,22 +41,22 @@ public class cartservice {
         }
         return (Cart)cartRepository.findByUserAndItems(users, products).get();
     }
-    public Cart removeproduct(Long userid,Long productid) {
+    public Optional<Cart> removeproduct(Long userid,Long productid) {
         Products products = productRepoistory.findByProductid(productid);
         Users users = userRepository.findByuserid(userid);
 
-        if(cartRepository.findByUserAndItems(users,products).get().getQuantity() == 1) {
+        if(cartRepository.findByUserAndItems(users,products).get().getQuantity() <= 1) {
             Cart cart = cartRepository.findByUserAndItems(users,products).get();
             cart.setQuantity(0);
-            cartRepository.save(cart);
+            cartRepository.delete(cart);
         }
-        else if(cartRepository.findByUserAndItems(users,products).get().getQuantity() > 1) {
+        else {
             Cart cart = cartRepository.findByUserAndItems(users,products).get();
 
             cart.setQuantity(cart.getQuantity() - 1);
             cartRepository.save(cart);
         }
-        return cartRepository.findByUserAndItems(users,products).get();
+        return cartRepository.findByUserAndItems(users,products);
     }
 
     public List<Cart> showCart(Long user_id, Principal principal) {
@@ -62,6 +64,14 @@ public class cartservice {
         return cartRepository.findByUserAndItems_Active(user,1);
     }
 
+public Optional<Cart> deleteproduct(Long userid,Long productid)
+{
+    Products product=productRepoistory.findByProductid(productid);
+    Users users=userRepository.findByuserid(userid);
+    Cart cart=cartRepository.findByUserAndItems(users,product).get();
+    cartRepository.delete(cart);
+    return cartRepository.findByUserAndItems(users,product);
+}
    public String clearCart(Long userId,Principal principal) {
 
         Users user = userRepository.findByuserid(userId);

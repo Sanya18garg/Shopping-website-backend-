@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import com.caseStudy.eCart.service.cartservice;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
+@CrossOrigin(origins="http://localhost:4200")
 @RestController
 @RequestMapping("/cart")
 public class cartController {
@@ -26,13 +28,22 @@ public class cartController {
      }
     @RequestMapping(value="/removeproduct/receive/{productid}",method = RequestMethod.GET)
     @ResponseBody
-    public Cart removeproduct(@PathVariable Long productid, Principal principal)
+    public Optional<Cart> removeproduct(@PathVariable Long productid, Principal principal)
     {
         return c1.removeproduct(u.getUserId(principal),productid);
 
 
     }
-    @RequestMapping(value="/addproduct/receive/{productid}",method = RequestMethod.POST)
+    @RequestMapping(value="/deleteproduct/receive/{productid}",method = RequestMethod.GET)
+    @ResponseBody
+    public Optional<Cart> deleteproduct(@PathVariable Long productid, Principal principal)
+    {
+        return c1.deleteproduct(u.getUserId(principal),productid);
+
+
+    }
+
+    @RequestMapping(value="/addproduct/receive/{productid}",method = RequestMethod.GET)
     @ResponseBody
     public Cart addproduct(@PathVariable Long productid, Principal principal)
     {
