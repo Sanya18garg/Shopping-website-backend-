@@ -1,6 +1,7 @@
 package com.caseStudy.eCart.service;
 import com.caseStudy.eCart.modals.Cart;
 // import com.caseStudy.eCart.modals.FixedCart;
+import com.caseStudy.eCart.modals.Orderhistory;
 import com.caseStudy.eCart.modals.Products;
 import com.caseStudy.eCart.modals.Users;
 import com.caseStudy.eCart.Respository.*;
@@ -20,7 +21,8 @@ public class cartservice {
 
     @Autowired
     private userRepository userRepository;
-    //private OrderHistoryRepository orderHistoryRepository;
+    @Autowired
+    private OrderHistoryRepository orderHistoryRepository;
 
     public Cart addProduct(Long userid, Long productid) {
         Products products = productRepoistory.findByProductid(productid);
@@ -81,6 +83,26 @@ public Optional<Cart> deleteproduct(Long userid,Long productid)
         }
         return "cart cleared!";
     }
+    public double checkout(Long userid, Principal principal) {
+        Users users = userRepository.findByuserid(userid);
+        double p;
+        double total = 0;
+        List<Cart> cartList = cartRepository.findAllByUser(users);
+        for(Cart cart: cartList){
+            Orderhistory orderHistory = new Orderhistory();
+            orderHistory.setProducts(cart.getItems());
+            p = cart.getItems().getProductPrice();
+            orderHistory.setQuantity(cart.getQuantity());
+            total = total+cart.getQuantity()*p;
+            orderHistory.setPrice((int)(cart.getQuantity()*p));
+            orderHistory.setDate();
+            orderHistoryRepository.save(orderHistory);
+
+        }
+        clearCart(userid,principal);
+        return total;
+    }
+
 }
 
 

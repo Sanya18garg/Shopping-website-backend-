@@ -42,6 +42,11 @@ public class cartController {
 
 
     }
+    @RequestMapping(value = "/checkout/recieve", method = RequestMethod.GET)
+    @ResponseBody
+    public double checkout(Principal principal) {
+        return c1.checkout(u.getUserId(principal),principal);
+    }
 
     @RequestMapping(value="/addproduct/receive/{productid}",method = RequestMethod.GET)
     @ResponseBody
