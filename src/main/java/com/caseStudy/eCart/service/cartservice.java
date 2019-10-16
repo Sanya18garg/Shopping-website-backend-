@@ -26,10 +26,10 @@ public class cartservice {
 
     public Cart addProduct(Long userid, Long productid) {
         Products products = productRepoistory.findByProductid(productid);
-        Users users = userRepository.findByuserid((userid));
+        Users users = userRepository.findByUserId((userid));
 
         if (cartRepository.findByUserAndItems(users, products).isPresent()) {
-            Cart cartt = (Cart) cartRepository.findByUserAndItems(users, products).get();
+            Cart cartt =  cartRepository.findByUserAndItems(users, products).get();
             //    FixedCart fixedCart = fixedCartRepository.findByRefId(cartt.getId().intValue());
             cartt.setQuantity(cartt.getQuantity() + 1);
             //  fixedCart.setQuantity(fixedCart.getQuantity() + 1);
@@ -41,11 +41,11 @@ public class cartservice {
             cartRepository.save(c);
             //   fixedCartRepository.save(fc);
         }
-        return (Cart)cartRepository.findByUserAndItems(users, products).get();
+        return cartRepository.findByUserAndItems(users, products).get();
     }
     public Optional<Cart> removeproduct(Long userid,Long productid) {
         Products products = productRepoistory.findByProductid(productid);
-        Users users = userRepository.findByuserid(userid);
+        Users users = userRepository.findByUserId(userid);
 
         if(cartRepository.findByUserAndItems(users,products).get().getQuantity() <= 1) {
             Cart cart = cartRepository.findByUserAndItems(users,products).get();
@@ -62,35 +62,36 @@ public class cartservice {
     }
 
     public List<Cart> showCart(Long user_id, Principal principal) {
-        Users user = userRepository.findByuserid(user_id);
+        Users user = userRepository.findByUserId(user_id);
         return cartRepository.findByUserAndItems_Active(user,1);
     }
 
 public Optional<Cart> deleteproduct(Long userid,Long productid)
 {
     Products product=productRepoistory.findByProductid(productid);
-    Users users=userRepository.findByuserid(userid);
+    Users users=userRepository.findByUserId(userid);
     Cart cart=cartRepository.findByUserAndItems(users,product).get();
     cartRepository.delete(cart);
     return cartRepository.findByUserAndItems(users,product);
 }
    public String clearCart(Long userId,Principal principal) {
 
-        Users user = userRepository.findByuserid(userId);
+        Users user = userRepository.findByUserId(userId);
         List<Cart> cartList=cartRepository.findAllByUser(user);
         for (Cart cart : cartList) {
-            cartRepository.deleteById(cart.getCartid());
+            cartRepository.deleteById(cart.getCartId());
         }
         return "cart cleared!";
     }
     public double checkout(Long userid, Principal principal) {
-        Users users = userRepository.findByuserid(userid);
+        Users users = userRepository.findByUserId(userid);
         double p;
         double total = 0;
         List<Cart> cartList = cartRepository.findAllByUser(users);
         for(Cart cart: cartList){
             Orderhistory orderHistory = new Orderhistory();
             orderHistory.setProducts(cart.getItems());
+            orderHistory.setUsers(cart.getUser());
             p = cart.getItems().getProductPrice();
             orderHistory.setQuantity(cart.getQuantity());
             total = total+cart.getQuantity()*p;
@@ -101,6 +102,11 @@ public Optional<Cart> deleteproduct(Long userid,Long productid)
         }
         clearCart(userid,principal);
         return total;
+    }
+    public List<Orderhistory> showorderhistory(Long userid,Principal principal)
+    {
+        Users users=userRepository.findByUserId(userid);
+        return orderHistoryRepository.findAllByUsers(users);
     }
 
 }

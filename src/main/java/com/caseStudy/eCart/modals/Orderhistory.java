@@ -14,6 +14,15 @@ public class Orderhistory  implements Serializable {
     @Column(name="quantity")
     private int quantity;
 
+
+
+    @ManyToOne
+    private Products products;
+    @Column(name="price")
+    private int price;
+    @Column(nullable = false)
+    LocalDate date;
+
     public long getHid() {
         return hid;
     }
@@ -54,12 +63,16 @@ public class Orderhistory  implements Serializable {
         this.date = LocalDate.now();
     }
 
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
     @ManyToOne
-    private Products products;
-    @Column(name="price")
-    private int price;
-    @Column(nullable = false)
-    LocalDate date;
+    private Users users;
 
 
 }

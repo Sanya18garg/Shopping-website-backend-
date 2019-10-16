@@ -1,5 +1,7 @@
 package com.caseStudy.eCart.modals;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,8 +9,8 @@ import javax.persistence.*;
 public class Cart {
 @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private long cartid;
+@Column(name="cartId")
+    private long cartId;
 @ManyToOne
     private Products items;
 @ManyToOne
@@ -26,12 +28,12 @@ public Cart()
 
 }
 
-    public long getCartid() {
-        return cartid;
+    public long getCartId() {
+        return cartId;
     }
 
-    public void setCartid(long cartid) {
-        this.cartid = cartid;
+    public void setCartId(long cartId) {
+        this.cartId = cartId;
     }
 
     public Products getItems() {
@@ -57,6 +59,4 @@ public Cart()
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-
 }

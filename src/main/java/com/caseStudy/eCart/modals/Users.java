@@ -8,15 +8,16 @@ import java.io.Serializable;
 public class Users implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="userid")
-    private long userid;
+    @Column(name="userId")
+    private long userId;
 
-    public long getUserid() {
-        return userid;
+
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUserid(long userid) {
-        this.userid = userid;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {

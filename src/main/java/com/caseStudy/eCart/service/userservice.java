@@ -21,7 +21,7 @@ public class userservice {
     public Long getUserId(Principal principal)
     {
         String username = principal.getName();
-        Long id = userRepository.findByUsername(username).get().getUserid();
+        Long id = userRepository.findByUsername(username).get().getUserId();
         return id;
     }
     //    public Long getUserRole(Principal principal) {
