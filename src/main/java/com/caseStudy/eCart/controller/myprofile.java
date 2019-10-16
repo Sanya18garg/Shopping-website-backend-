@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
 
-@CrossOrigin(origins="http://localhost:4200")
+@CrossOrigin(origins="http://localhost:4200",allowedHeaders = "*")
 @RestController
 @RequestMapping("/profile")
 public class myprofile {
