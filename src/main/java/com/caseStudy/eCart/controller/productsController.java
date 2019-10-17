@@ -49,6 +49,18 @@ public List<Products> getAllNotes()
 {
     return p.save(u);
 }
+    @PutMapping("/edit/{id}")
+    public Products updateNote(@PathVariable(value = "id") Long noteId,@Valid @RequestBody Products noteDetails) {
+        Products x = p.findByProductid(noteId);
+        x.setProductName(noteDetails.getProductName());
+        x.setCategory(noteDetails.getCategory());
+        x.setDetail(noteDetails.getDetail());
+        x.setImage(noteDetails.getImage());
+        x.setProductPrice(noteDetails.getProductPrice());
+        x.setActive(noteDetails.getActive());
+        Products updatedNote = p.save(x);
+        return updatedNote;
+    }
 //    @GetMapping("/products/{category}/{p1}/{p2}")
 //    public List<Products> getNodeByPriceRange(@PathVariable(value="category")String category,@PathVariable(value="p1")String p1,@PathVariable(value="p2")String p2)
 //    {
