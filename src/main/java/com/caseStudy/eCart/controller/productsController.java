@@ -38,6 +38,7 @@ public List<Products> getAllNotes()
     return p.findByCategory(category);
 }
 
+
 @GetMapping("/getByPrice/{price1}/{price2}")
     public List<Products> getProductByPrice(@PathVariable(value="price1")int  p_price1,@PathVariable(value="price2")int p_price2)
 {
